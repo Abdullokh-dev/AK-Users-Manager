@@ -42,15 +42,17 @@
       <div class="row mt-5 mb-3 d-flex justify-content-center">
         <div class="col-11 ps-0 d-flex">
           <span class="sort-text">Сортировка:</span>
-          <div>
-          <span class="px-4">
-            <input id="Дата регистрации" name="sort" type="radio" value="regs"/>
-            <label for="Дата регистрации" @click="sortByDate">Дата регистрации</label>
-          </span>
 
-            <input id="Рейтинг" name="sort" type="radio" value="rate"/>
-            <label for="Рейтинг" @click="sortByRate">Рейтинг</label>
-          </div>
+            <button @click="sortByDate" id="sort-btn" :class="this.isSortedByDate ? 'selected' : 'unselected'"> Дата регистрации </button>
+            <button @click="sortByRate" :class="this.isSortedByRate ? 'selected' : 'unselected'"> Рейтинг </button>
+<!--          <span class="px-4">-->
+<!--            <input id="Дата регистрации" name="sort" type="radio" value="regs"/>-->
+<!--            <label for="Дата регистрации" @click="sortByDate">Дата регистрации</label>-->
+<!--          </span>-->
+
+<!--            <input id="Рейтинг" name="sort" type="radio" value="rate"/>-->
+<!--            <label for="Рейтинг" @click="sortByRate">Рейтинг</label>-->
+
         </div>
       </div>
       <!-- Table -->
@@ -115,6 +117,8 @@ export default {
       sortedDateAsc: true,
       sortedRateAsc: true,
       filtering: false,
+      isSortedByDate: false,
+      isSortedByRate: false,
       countOfPage: 1,
       currentPage: 1,
       usersInPage: [],
@@ -165,9 +169,14 @@ export default {
     unFilter() {
       this.searchValue = ''
       this.filtering = false
+      this.isSortedByDate = false
+      this.isSortedByRate = false
+      this.usersInPage = this.users.slice((this.currentPage - 1) * this.countOfPage, this.currentPage * 5)
     },
     sortByDate() {
       this.filtering = true
+      this.isSortedByDate = true
+      this.isSortedByRate = false
       if (this.sortedDateAsc) {
         this.usersInPage.sort((a, b) => a.registration_date > b.registration_date ? 1 : -1);
         return this.sortedDateAsc = false
@@ -178,6 +187,8 @@ export default {
     },
     sortByRate() {
       this.filtering = true
+      this.isSortedByRate = true
+      this.isSortedByDate = false
       if (this.sortedRateAsc) {
         this.usersInPage.sort((a, b) => a.rating > b.rating ? 1 : -1);
         return this.sortedRateAsc = false
@@ -205,6 +216,22 @@ export default {
 </script>
 
 <style scoped>
+
+.unselected, .selected {
+  border: none;
+  background-color: #F7F7F7;
+  border-bottom: 3px #9EAAB4 dashed;
+  color: #9EAAB4;
+}
+
+.selected {
+  color: #333333;
+}
+
+#sort-btn {
+  margin: 0 20px;
+}
+
 input {
   border-radius: 4px;
   height: 34px;
@@ -339,10 +366,15 @@ label {
   cursor: pointer;
 }
 
+.btn-prev {
+  margin: auto 0;
+}
+
 #btn-page {
   border: none;
   border-radius: 4px;
-  width: 30px;
+  text-align: center;
+  padding: 5px 10px;
   background-color: #F7F7F7;
 }
 
