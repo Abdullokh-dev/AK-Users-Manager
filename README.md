@@ -1,4 +1,4 @@
-# Labmedia-Task
+# Labmedia Task
 
 ## Project setup
 ```
