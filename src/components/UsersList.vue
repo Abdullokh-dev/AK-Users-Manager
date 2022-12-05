@@ -42,17 +42,8 @@
       <div class="row mt-5 mb-3 d-flex justify-content-center">
         <div class="col-11 ps-0 d-flex">
           <span class="sort-text">Сортировка:</span>
-
             <button @click="sortByDate" id="sort-btn" :class="this.isSortedByDate ? 'selected' : 'unselected'"> Дата регистрации </button>
             <button @click="sortByRate" :class="this.isSortedByRate ? 'selected' : 'unselected'"> Рейтинг </button>
-<!--          <span class="px-4">-->
-<!--            <input id="Дата регистрации" name="sort" type="radio" value="regs"/>-->
-<!--            <label for="Дата регистрации" @click="sortByDate">Дата регистрации</label>-->
-<!--          </span>-->
-
-<!--            <input id="Рейтинг" name="sort" type="radio" value="rate"/>-->
-<!--            <label for="Рейтинг" @click="sortByRate">Рейтинг</label>-->
-
         </div>
       </div>
       <!-- Table -->
@@ -217,21 +208,6 @@ export default {
 
 <style scoped>
 
-.unselected, .selected {
-  border: none;
-  background-color: #F7F7F7;
-  border-bottom: 3px #9EAAB4 dashed;
-  color: #9EAAB4;
-}
-
-.selected {
-  color: #333333;
-}
-
-#sort-btn {
-  margin: 0 20px;
-}
-
 input {
   border-radius: 4px;
   height: 34px;
@@ -246,18 +222,20 @@ input::placeholder {
   font-weight: 400;
 }
 
-input:checked + label {
-  color: #333;
-  border-bottom-color: #333;
-}
-
-input[type='radio'] {
-  display: none;
-}
-
-label {
+/* don't delete it is used for sorting buttons */
+.unselected, .selected {
+  border: none;
+  background-color: #F7F7F7;
   border-bottom: 3px #9EAAB4 dashed;
   color: #9EAAB4;
+}
+
+.selected {
+  color: #333333;
+}
+
+#sort-btn {
+  margin: 0 20px;
 }
 
 .sort-text {
