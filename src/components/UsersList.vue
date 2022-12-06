@@ -42,8 +42,10 @@
       <div class="row mt-5 mb-3 d-flex justify-content-center">
         <div class="col-11 ps-0 d-flex">
           <span class="sort-text">Сортировка:</span>
-            <button @click="sortByDate" id="sort-btn" :class="this.isSortedByDate ? 'selected' : 'unselected'"> Дата регистрации </button>
-            <button @click="sortByRate" :class="this.isSortedByRate ? 'selected' : 'unselected'"> Рейтинг </button>
+          <button id="sort-btn" :class="this.isSortedByDate ? 'selected' : 'unselected'" @click="sortByDate"> Дата
+            регистрации
+          </button>
+          <button :class="this.isSortedByRate ? 'selected' : 'unselected'" @click="sortByRate"> Рейтинг</button>
         </div>
       </div>
       <!-- Table -->
@@ -72,7 +74,8 @@
               <span class="rating"> {{ user.rating }} </span>
             </div>
             <div class="col-1 col-lg-auto">
-              <svg class="del-btn" fill="none" height="15" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg" @click="showDelModal(user.id)">
+              <svg class="del-btn" fill="none" height="15" viewBox="0 0 24 24" width="15"
+                   xmlns="http://www.w3.org/2000/svg" @click="showDelModal(user.id)">
                 <path d="M4 4L20 20" stroke="#000000" stroke-linecap="round" stroke-width="4.5"/>
                 <path d="M4 20L20 4" stroke="#000000" stroke-linecap="round" stroke-width="4.5"/>
               </svg>
@@ -85,10 +88,11 @@
       <div class="row pb-5">
         <div class="col d-flex justify-content-center">
           <span class="pe-3 btn-prev" @click="prevPage"> &#8810; </span>
-          <button v-for="n in countOfPage" :key="n" id="btn-page" :class="{'active-page' : currentPage === n}" @click="changePage(n)">
+          <button v-for="n in countOfPage" id="btn-page" :key="n" :class="{'active-page' : currentPage === n}"
+                  @click="changePage(n)">
             {{ n }}
           </button>
-          <span @click="nextPage" class="ps-3 btn-prev"> &#8811; </span>
+          <span class="ps-3 btn-prev" @click="nextPage"> &#8811; </span>
         </div>
       </div>
 
@@ -114,7 +118,9 @@ export default {
       currentPage: 1,
       usersInPage: [],
       isModalActive: false,
-      selectedItem: null
+      selectedItem: null,
+      page: 0,
+      record_per_page: 5
     }
   },
   methods: {
@@ -122,7 +128,7 @@ export default {
       axios.get("https://5ebbb8e5f2cfeb001697d05c.mockapi.io/users")
         .then((response) => this.users = response.data)
         .then(() => {
-          this.usersInPage = this.users.slice((this.currentPage - 1) * this.countOfPage, this.currentPage * 5)
+          this.usersInPage = this.users.slice(this.currentPage, 5)
         })
         .then(() => {
           this.countOfPage = Math.ceil(this.users.length / 5)
@@ -138,11 +144,14 @@ export default {
     },
     removeElement() {
       this.users.forEach((item, index) => {
-        if(item.id === this.selectedItem) {
+        if (item.id === this.selectedItem) {
           this.users.splice(index, 1)
         }
       })
       this.closeModal()
+      if (this.userList.length === 0) {
+        this.currentPage--
+      }
     },
     prevPage() {
       if (this.currentPage !== 1) {
@@ -158,7 +167,6 @@ export default {
     },
     changePage(number) {
       this.currentPage = number
-      this.usersInPage = this.users.slice((this.currentPage - 1) * this.countOfPage, this.currentPage * 5)
     },
     unFilter() {
       this.searchValue = ''
@@ -172,10 +180,10 @@ export default {
       this.isSortedByDate = true
       this.isSortedByRate = false
       if (this.sortedDateAsc) {
-        this.usersInPage.sort((a, b) => a.registration_date > b.registration_date ? 1 : -1);
+        this.users.sort((a, b) => a.registration_date > b.registration_date ? 1 : -1);
         return this.sortedDateAsc = false
       } else {
-        this.usersInPage.sort((a, b) => a.registration_date > b.registration_date ? -1 : 1);
+        this.users.sort((a, b) => a.registration_date > b.registration_date ? -1 : 1);
         return this.sortedDateAsc = true
       }
     },
@@ -184,18 +192,18 @@ export default {
       this.isSortedByRate = true
       this.isSortedByDate = false
       if (this.sortedRateAsc) {
-        this.usersInPage.sort((a, b) => a.rating > b.rating ? 1 : -1);
+        this.users.sort((a, b) => a.rating > b.rating ? 1 : -1);
         return this.sortedRateAsc = false
       } else {
-        this.usersInPage.sort((a, b) => a.rating > b.rating ? -1 : 1);
+        this.users.sort((a, b) => a.rating > b.rating ? -1 : 1);
         return this.sortedRateAsc = true
       }
     },
   },
   computed: {
     userList() {
-      let filter = new RegExp(this.searchValue, 'i')
-      return this.users.filter(el => el.username.match(filter) || el.email.match(filter)).slice((this.currentPage - 1) * this.countOfPage, this.currentPage * 5)
+      let filter = this.searchValue
+      return this.users.filter(el => el.username.match(filter) || el.email.match(filter)).slice(this.page, this.record_per_page)
     },
   },
   mounted() {
@@ -205,11 +213,46 @@ export default {
     'searchValue.length'() {
       this.searchValue.length ? this.filtering = true : this.filtering = false
       this.countOfPage = Math.ceil(this.users.filter(el => el.username.match(this.searchValue) || el.email.match(this.searchValue)).length / 5)
+      if(this.countOfPage ===0) {
+        return this.countOfPage = 1
+      }
     },
     'users'() {
       this.countOfPage = Math.ceil(this.users.length / 5)
     },
-  },
+    'countOfPage'() {
+
+    },
+    'userList'() {
+      if(this.userList.length === 0) {
+        this.countOfPage = 1
+      }
+    },
+    'currentPage'() {
+      switch (this.currentPage) {
+        case 1:
+          this.page = 0
+          this.record_per_page = 5
+          break;
+        case 2:
+          this.page = 5
+          this.record_per_page = 10
+          break;
+        case 3:
+          this.page = 10
+          this.record_per_page = 15
+          break;
+        case 4:
+          this.page = 15
+          this.record_per_page = 20
+          break;
+        case 5:
+          this.page = 20
+          this.record_per_page = 25
+          break;
+      }
+    },
+  }
 }
 </script>
 
