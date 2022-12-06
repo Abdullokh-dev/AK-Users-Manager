@@ -88,8 +88,7 @@
       <div class="row pb-5">
         <div class="col d-flex justify-content-center">
           <span class="pe-3 btn-prev" @click="prevPage"> &#8810; </span>
-          <button v-for="n in countOfPage" id="btn-page" :key="n" :class="{'active-page' : currentPage === n}"
-                  @click="changePage(n)">
+          <button v-for="n in countOfPage" id="btn-page" :key="n" :class="{'active-page' : currentPage === n}" @click="changePage(n)">
             {{ n }}
           </button>
           <span class="ps-3 btn-prev" @click="nextPage"> &#8811; </span>
@@ -150,7 +149,7 @@ export default {
       })
       this.closeModal()
       if (this.userList.length === 0) {
-        this.currentPage--
+        this.currentPage = 1
       }
     },
     prevPage() {
@@ -173,7 +172,6 @@ export default {
       this.filtering = false
       this.isSortedByDate = false
       this.isSortedByRate = false
-      this.usersInPage = this.users.slice((this.currentPage - 1) * this.countOfPage, this.currentPage * 5)
     },
     sortByDate() {
       this.filtering = true
@@ -213,19 +211,16 @@ export default {
     'searchValue.length'() {
       this.searchValue.length ? this.filtering = true : this.filtering = false
       this.countOfPage = Math.ceil(this.users.filter(el => el.username.match(this.searchValue) || el.email.match(this.searchValue)).length / 5)
-      if(this.countOfPage ===0) {
+      if(this.countOfPage === 0) {
         return this.countOfPage = 1
       }
     },
     'users'() {
       this.countOfPage = Math.ceil(this.users.length / 5)
     },
-    'countOfPage'() {
-
-    },
     'userList'() {
       if(this.userList.length === 0) {
-        this.countOfPage = 1
+        this.currentPage = 1
       }
     },
     'currentPage'() {
