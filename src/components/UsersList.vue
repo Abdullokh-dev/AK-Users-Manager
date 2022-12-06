@@ -204,8 +204,9 @@ export default {
   watch: {
     'searchValue.length'() {
       this.searchValue.length ? this.filtering = true : this.filtering = false
+      this.countOfPage = Math.ceil(this.users.filter(el => el.username.match(this.searchValue) || el.email.match(this.searchValue)).length / 5)
     },
-    'userList'() {
+    'users'() {
       this.countOfPage = Math.ceil(this.users.length / 5)
     },
   },
