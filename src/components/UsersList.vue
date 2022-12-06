@@ -124,7 +124,7 @@ export default {
       axios.get("https://5ebbb8e5f2cfeb001697d05c.mockapi.io/users")
         .then((response) => this.users = response.data)
         .then(() => {
-          this.usersInPage = this.users.slice(this.currentPage, 5)
+          this.usersInPage = this.users.slice()
         })
         .then(() => {
           this.countOfPage = Math.ceil(this.users.length / 5)
@@ -142,6 +142,11 @@ export default {
       this.users.forEach((item, index) => {
         if (item.id === this.selectedItem) {
           this.users.splice(index, 1)
+        }
+      })
+      this.usersInPage.forEach((item, index) => {
+        if (item.id === this.selectedItem) {
+          this.usersInPage.splice(index, 1)
         }
       })
       this.closeModal()
@@ -169,6 +174,7 @@ export default {
       this.filtering = false
       this.isSortedByDate = false
       this.isSortedByRate = false
+      this.userList = this.usersInPage
     },
     sortByDate() {
       this.filtering = true
@@ -196,9 +202,14 @@ export default {
     },
   },
   computed: {
-    userList() {
-      let filter = new RegExp(this.searchValue, 'i')
-      return this.users.filter(el => el.username.match(filter) || el.email.match(filter)).slice(this.page, this.record_per_page)
+    userList: {
+      get(){
+        let filter = new RegExp(this.searchValue, 'i')
+        return this.users.filter(el => el.username.match(filter) || el.email.match(filter)).slice(this.page, this.record_per_page)
+      },
+      set(newValue) {
+        this.users = newValue
+      }
     }
   },
   mounted() {
