@@ -197,7 +197,7 @@ export default {
   },
   computed: {
     userList() {
-      let filter = this.searchValue
+      let filter = new RegExp(this.searchValue, 'i')
       return this.users.filter(el => el.username.match(filter) || el.email.match(filter)).slice(this.page, this.record_per_page)
     }
   },
