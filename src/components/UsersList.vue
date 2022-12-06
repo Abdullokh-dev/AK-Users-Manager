@@ -150,7 +150,8 @@ export default {
         }
       })
       this.closeModal()
-      if (this.userList.length === 0) {
+      if (this.userList.length === 0 && this.countOfPage === 1) {
+        this.countOfPage = 1
         this.currentPage = 1
       }
     },
@@ -255,6 +256,11 @@ export default {
           break;
       }
     },
+    'countOfPage'() {
+      if(this.userList.length === 0 && this.countOfPage === 5) {
+        this.countOfPage = 1
+      }
+    }
   }
 }
 </script>
