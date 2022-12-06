@@ -57,7 +57,7 @@
             <div class="col-6 col-lg-3">Рейтинг</div>
           </div>
           <!-- users list -->
-          <div v-for="(user, index) in userList" :key="user.id" class="row px-3">
+          <div v-for="user in userList" :key="user.id" class="row px-3">
             <hr class="top-hr"/>
             <div class="col-6 col-lg-3 ps-0">
               <div class="username"> {{ user.username }}</div>
@@ -72,7 +72,7 @@
               <span class="rating"> {{ user.rating }} </span>
             </div>
             <div class="col-1 col-lg-auto">
-              <svg class="del-btn" fill="none" height="15" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg" @click="showDelModal(index)">
+              <svg class="del-btn" fill="none" height="15" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg" @click="showDelModal(user.id)">
                 <path d="M4 4L20 20" stroke="#000000" stroke-linecap="round" stroke-width="4.5"/>
                 <path d="M4 20L20 4" stroke="#000000" stroke-linecap="round" stroke-width="4.5"/>
               </svg>
@@ -128,17 +128,20 @@ export default {
           this.countOfPage = Math.ceil(this.users.length / 5)
         })
     },
-    showDelModal(index) {
+    showDelModal(id) {
       this.isModalActive = true
-      this.selectedItem = index
+      this.selectedItem = id
     },
     closeModal() {
       this.isModalActive = false
       this.selectedItem = null
     },
     removeElement() {
-      this.usersInPage.splice(this.selectedItem, 1);
-      this.users.splice(this.selectedItem, 1);
+      this.users.forEach((item, index) => {
+        if(item.id === this.selectedItem) {
+          this.users.splice(index, 1)
+        }
+      })
       this.closeModal()
     },
     prevPage() {
@@ -192,7 +195,7 @@ export default {
   computed: {
     userList() {
       let filter = new RegExp(this.searchValue, 'i')
-      return this.usersInPage.filter(el => el.username.match(filter) || el.email.match(filter))
+      return this.users.filter(el => el.username.match(filter) || el.email.match(filter)).slice((this.currentPage - 1) * this.countOfPage, this.currentPage * 5)
     },
   },
   mounted() {
@@ -201,8 +204,11 @@ export default {
   watch: {
     'searchValue.length'() {
       this.searchValue.length ? this.filtering = true : this.filtering = false
-    }
-  }
+    },
+    'userList'() {
+      this.countOfPage = Math.ceil(this.users.length / 5)
+    },
+  },
 }
 </script>
 
