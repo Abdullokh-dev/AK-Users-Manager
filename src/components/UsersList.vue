@@ -42,9 +42,7 @@
       <div class="row mt-5 mb-3 d-flex justify-content-center">
         <div class="col-11 ps-0 d-flex">
           <span class="sort-text">Сортировка:</span>
-          <button id="sort-btn" :class="this.isSortedByDate ? 'selected' : 'unselected'" @click="sortByDate"> Дата
-            регистрации
-          </button>
+          <button id="sort-btn" :class="this.isSortedByDate ? 'selected' : 'unselected'" @click="sortByDate"> Дата регистрации</button>
           <button :class="this.isSortedByRate ? 'selected' : 'unselected'" @click="sortByRate"> Рейтинг</button>
         </div>
       </div>
@@ -74,8 +72,7 @@
               <span class="rating"> {{ user.rating }} </span>
             </div>
             <div class="col-1 col-lg-auto">
-              <svg class="del-btn" fill="none" height="15" viewBox="0 0 24 24" width="15"
-                   xmlns="http://www.w3.org/2000/svg" @click="showDelModal(user.id)">
+              <svg class="del-btn" fill="none" height="15" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg" @click="showDelModal(user.id)">
                 <path d="M4 4L20 20" stroke="#000000" stroke-linecap="round" stroke-width="4.5"/>
                 <path d="M4 20L20 4" stroke="#000000" stroke-linecap="round" stroke-width="4.5"/>
               </svg>
@@ -202,7 +199,7 @@ export default {
     userList() {
       let filter = this.searchValue
       return this.users.filter(el => el.username.match(filter) || el.email.match(filter)).slice(this.page, this.record_per_page)
-    },
+    }
   },
   mounted() {
     this.fetchUsers()
