@@ -150,6 +150,7 @@ export default {
         }
       })
       this.closeModal()
+      this.countOfPage = Math.ceil(this.users.length / 5)
       if (this.userList.length === 0 && this.countOfPage === 1) {
         this.countOfPage = 1
         this.currentPage = 1
@@ -177,7 +178,7 @@ export default {
       this.filtering = false
       this.isSortedByDate = false
       this.isSortedByRate = false
-      this.userList = this.usersInPage
+      this.userList = this.usersInPage.slice()
     },
     sortByDate() {
       this.filtering = true
@@ -225,9 +226,6 @@ export default {
       if(this.countOfPage === 0) {
         return this.countOfPage = 1
       }
-    },
-    'users'() {
-      this.countOfPage = Math.ceil(this.userList.length / 5)
     },
     'userList'() {
       if(this.userList.length === 0) {
