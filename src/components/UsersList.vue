@@ -232,6 +232,8 @@ export default {
     'userList'() {
       if(this.userList.length === 0) {
         this.currentPage = 1
+        this.page = 0
+        this.record_per_page = 5
       }
     },
     'countOfPage'() {
