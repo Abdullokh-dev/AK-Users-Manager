@@ -227,7 +227,7 @@ export default {
       }
     },
     'users'() {
-      this.countOfPage = Math.ceil(this.users.length / 5)
+      this.countOfPage = Math.ceil(this.userList.length / 5)
     },
     'userList'() {
       if(this.userList.length === 0) {
@@ -237,7 +237,7 @@ export default {
       }
     },
     'countOfPage'() {
-      if(this.userList.length === 0 && this.countOfPage === 5) {
+      if(this.userList.length === 0 || (this.userList.length === 0 && this.countOfPage === 5)) {
         this.countOfPage = 1
       }
     }
