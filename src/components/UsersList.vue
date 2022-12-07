@@ -33,7 +33,7 @@
         <div class="col-11 p-3 bg-white search-box">
           <input v-model="searchValue" placeholder="Поиск по имени или e-mail" type="text">
           <div v-if="filtering" class="mt-4">
-            <img alt="#" src="../assets/clear.svg">
+            <img alt="#" class="clear-icon" @click="unFilter" src="../assets/clear.svg">
             <span class="ps-2 clear-text" @click="unFilter">Очистить фильтр</span>
           </div>
         </div>
@@ -332,6 +332,10 @@ input::placeholder {
   color: #4F4F4F;
   font-size: 12px;
   font-weight: 500;
+}
+
+.clear-icon, .clear-text {
+  cursor: pointer;
 }
 
 .modal-box {
