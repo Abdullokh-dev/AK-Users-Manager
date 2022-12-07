@@ -169,6 +169,8 @@ export default {
     },
     changePage(number) {
       this.currentPage = number
+      this.page = number * 5 - 5
+      this.record_per_page = number * 5
     },
     unFilter() {
       this.searchValue = ''
@@ -230,30 +232,6 @@ export default {
     'userList'() {
       if(this.userList.length === 0) {
         this.currentPage = 1
-      }
-    },
-    'currentPage'() {
-      switch (this.currentPage) {
-        case 1:
-          this.page = 0
-          this.record_per_page = 5
-          break;
-        case 2:
-          this.page = 5
-          this.record_per_page = 10
-          break;
-        case 3:
-          this.page = 10
-          this.record_per_page = 15
-          break;
-        case 4:
-          this.page = 15
-          this.record_per_page = 20
-          break;
-        case 5:
-          this.page = 20
-          this.record_per_page = 25
-          break;
       }
     },
     'countOfPage'() {
