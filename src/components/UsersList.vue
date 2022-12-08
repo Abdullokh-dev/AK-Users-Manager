@@ -150,7 +150,8 @@ export default {
         }
       })
       this.closeModal()
-      this.countOfPage = Math.ceil(this.users.length / 5)
+      let filter = new RegExp(this.searchValue, 'i')
+      this.countOfPage = Math.ceil(this.users.filter(el => el.username.match(filter) || el.email.match(filter)).length / 5)
       if (this.userList.length === 0 && this.countOfPage === 1) {
         this.countOfPage = 1
         this.currentPage = 1
