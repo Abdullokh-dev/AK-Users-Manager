@@ -1,4 +1,4 @@
-# Labmedia Task
+# Users List Manager
 
 ## Project setup
 ```
